@@ -1,0 +1,103 @@
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Art House Realty — Недвижимость Армении</title>
+<style>
+:root{--ink:#18212f;--muted:#6b7280;--line:#e7eaf0;--bg:#f6f7f9;--gold:#b78b4b;--gold2:#e8d2ac;--white:#fff;--green:#26745b}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--ink)}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.topbar{background:#111827;color:#fff;padding:12px 5%;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;color:white;text-decoration:none}.monogram{width:42px;height:42px;border:1px solid var(--gold);color:var(--gold2);display:grid;place-items:center;font-family:Georgia,serif;font-size:21px;border-radius:8px}.brand strong{display:block;letter-spacing:1.8px;font-size:15px}.brand small{color:#c5c9d2;letter-spacing:2.6px;font-size:9px}
+.nav{display:flex;gap:20px;align-items:center}.nav a{color:#e7e9ee;text-decoration:none;font-size:14px}.nav a:hover{color:var(--gold2)}.post-btn{border:0;border-radius:9px;background:var(--gold);color:#171717;font-weight:700;padding:12px 17px}
+.hero{background:linear-gradient(115deg,#172033,#26354a);color:white;padding:54px 5% 46px}.hero-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:1.2fr .8fr;gap:35px;align-items:center}.eyebrow{color:var(--gold2);text-transform:uppercase;letter-spacing:2.4px;font-size:11px;font-weight:700}.hero h1{font-size:clamp(32px,4vw,49px);line-height:1.08;margin:14px 0}.hero p{color:#c9d0dc;line-height:1.6;max-width:520px}.hero-art{min-height:205px;border:1px solid #536071;border-radius:18px;background:linear-gradient(145deg,rgba(183,139,75,.18),rgba(255,255,255,.03));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.hero-art:before,.hero-art:after{content:"";position:absolute;border:1px solid rgba(232,210,172,.5);transform:rotate(45deg);width:180px;height:180px}.hero-art:after{width:125px;height:125px}.hero-art span{z-index:1;font-family:Georgia,serif;color:var(--gold2);font-size:38px;letter-spacing:6px}
+.wrap{max-width:1180px;margin:auto;padding:0 5%}.search-panel{background:white;margin:-22px auto 28px;position:relative;border-radius:14px;padding:18px;box-shadow:0 12px 35px #10182812;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr auto;gap:10px}.field{width:100%;border:1px solid var(--line);border-radius:9px;padding:12px;background:#fff;color:var(--ink);min-width:0}.search-panel button{background:var(--ink);color:white;border:0;border-radius:9px;padding:12px 20px;font-weight:700}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:26px 0 18px}.section-head h2{font-size:25px;margin:0 0 6px}.section-head p{margin:0;color:var(--muted);font-size:13px}.sort{border:1px solid var(--line);padding:10px;border-radius:8px;background:white;color:var(--ink)}
+.listings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{background:white;border:1px solid #eceef2;border-radius:14px;overflow:hidden;transition:transform .18s,box-shadow .18s}.card:hover{transform:translateY(-3px);box-shadow:0 12px 28px #17203312}.photo{height:205px;position:relative;background:#dfe5e8;overflow:hidden}.photo img{width:100%;height:100%;object-fit:cover;display:block}.tag{position:absolute;top:12px;left:12px;background:#fff;color:#243044;padding:6px 9px;border-radius:6px;font-size:11px;font-weight:700}.heart{position:absolute;right:12px;top:10px;background:#ffffffed;border:0;width:34px;height:34px;border-radius:50%;font-size:19px;color:#394150}.card-body{padding:16px}.price{font-size:22px;font-weight:800;letter-spacing:-.5px}.price span{font-size:13px;color:var(--muted);font-weight:500}.card h3{font-size:16px;margin:9px 0 7px;line-height:1.35}.address{font-size:13px;color:var(--muted);margin-bottom:13px}.facts{display:flex;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px;color:#4b5563;font-size:12px}.facts span{display:flex;gap:5px;align-items:center}.card-foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px}.agency{font-size:11px;color:var(--muted)}.details{background:#f2eadf;color:#6f4e23;border:0;border-radius:7px;padding:9px 12px;font-size:12px;font-weight:700}
+.empty{grid-column:1/-1;background:white;border:1px dashed #ccd2dc;border-radius:14px;text-align:center;padding:45px;color:var(--muted)}
+footer{margin-top:55px;background:#111827;color:#d4d8df;padding:30px 5%}.footer-inner{max-width:1180px;margin:auto;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}.footer-inner small{color:#9ca3af}
+.modal-backdrop{position:fixed;inset:0;background:#101827a8;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.modal-backdrop.open{display:flex}.modal{background:white;border-radius:16px;width:min(680px,100%);max-height:92vh;overflow:auto;padding:24px;box-shadow:0 20px 60px #0003}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modal h2{margin:0;font-size:23px}.close{border:0;background:#f0f1f4;border-radius:50%;width:36px;height:36px;font-size:22px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.form-field label{display:block;font-size:12px;font-weight:700;color:#555f70;margin-bottom:6px}.form-field.full{grid-column:1/-1}.form-field input,.form-field select,.form-field textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;background:white}.form-field textarea{min-height:80px;resize:vertical}.submit{width:100%;margin-top:17px;background:var(--gold);border:0;border-radius:9px;padding:13px;font-weight:800}.note{font-size:12px;color:var(--muted);line-height:1.5}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#18212f;color:white;padding:12px 18px;border-radius:9px;display:none;z-index:20;box-shadow:0 5px 25px #0003}
+@media(max-width:900px){.search-panel{grid-template-columns:repeat(2,1fr)}.search-panel button{grid-column:1/-1}.listings{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-inner{grid-template-columns:1fr}.hero-art{display:none}}
+@media(max-width:600px){.topbar{padding:12px 4%}.nav{width:100%;order:3;justify-content:space-between;gap:8px}.nav a{font-size:12px}.hero{padding:38px 4% 42px}.wrap{padding:0 4%}.search-panel{grid-template-columns:1fr;margin-top:-18px}.listings{grid-template-columns:1fr}.photo{height:225px}.section-head{align-items:start;flex-direction:column}.form-grid{grid-template-columns:1fr}.form-field.full{grid-column:auto}.brand strong{font-size:13px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="Art House Realty — главная">
+    <span class="monogram">AH</span><span><strong>ART HOUSE</strong><small>REALTY · ARMENIA</small></span>
+  </a>
+  <nav class="nav"><a href="#listings">Купить</a><a href="#listings" data-rent>Снять</a><a href="#about">О компании</a></nav>
+  <button class="post-btn" id="openForm">＋ Добавить объявление</button>
+</header>
+<section class="hero">
+ <div class="hero-inner">
+  <div><div class="eyebrow">Недвижимость · Ереван и Армения</div><h1>Найдите место,<br>которое станет вашим.</h1><p>Квартиры, дома и новостройки — выбирайте недвижимость с Art House Realty.</p></div>
+  <div class="hero-art"><span>ART HOUSE</span></div>
+ </div>
+</section>
+<main class="wrap">
+ <section class="search-panel" aria-label="Поиск недвижимости">
+  <input class="field" id="query" placeholder="Район, улица или название">
+  <select class="field" id="deal"><option value="">Купить или снять</option><option value="Продажа">Продажа</option><option value="Аренда">Аренда</option></select>
+  <select class="field" id="type"><option value="">Тип недвижимости</option><option>Квартира</option><option>Дом</option><option>Новостройка</option><option>Коммерческая</option></select>
+  <select class="field" id="rooms"><option value="">Комнаты</option><option value="1">1 комната</option><option value="2">2 комнаты</option><option value="3">3 комнаты</option><option value="4">4+ комнаты</option></select>
+  <button id="searchBtn">Найти</button>
+ </section>
+ <div class="section-head" id="listings"><div><h2>Актуальные предложения</h2><p id="count">Подобрали варианты для вас</p></div><select class="sort" id="sort"><option value="new">Сначала новые</option><option value="low">Сначала дешевле</option><option value="high">Сначала дороже</option></select></div>
+ <section class="listings" id="listingGrid"></section>
+</main>
+<footer id="about"><div class="footer-inner"><div><strong>ART HOUSE REALTY</strong><p>Ваш ориентир на рынке недвижимости Армении.</p></div><div><small>Консультация и подбор недвижимости</small><p>Телефон: 093 355 998<br>Instagram: @zhor_010</p></div><small>© <span id="year"></span> Art House Realty</small></div></footer>
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+ <div class="modal">
+  <div class="modal-head"><h2 id="modalTitle">Добавить объявление</h2><button class="close" id="closeForm" aria-label="Закрыть">×</button></div>
+  <p class="note">Заполните информацию о недвижимости. В этом прототипе объявления сохраняются в памяти браузера на вашем устройстве.</p>
+  <form id="listingForm">
+   <div class="form-grid">
+    <div class="form-field"><label for="fTitle">Название объявления *</label><input id="fTitle" required placeholder="Например, светлая квартира"></div>
+    <div class="form-field"><label for="fDeal">Тип сделки *</label><select id="fDeal" required><option value="Продажа">Продажа</option><option value="Аренда">Аренда</option></select></div>
+    <div class="form-field"><label for="fType">Тип недвижимости *</label><select id="fType" required><option>Квартира</option><option>Дом</option><option>Новостройка</option><option>Коммерческая</option></select></div>
+    <div class="form-field"><label for="fPrice">Цена (AMD) *</label><input id="fPrice" type="number" min="1" required placeholder="63000000"></div>
+    <div class="form-field"><label for="fCity">Город / район *</label><input id="fCity" required placeholder="Ереван, Арабкир"></div>
+    <div class="form-field"><label for="fArea">Площадь, м²</label><input id="fArea" type="number" min="1" placeholder="84"></div>
+    <div class="form-field"><label for="fRooms">Количество комнат</label><select id="fRooms"><option value="">Не указано</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4+</option></select></div>
+    <div class="form-field"><label for="fPhone">Телефон для связи *</label><input id="fPhone" required placeholder="093 355 998"></div>
+    <div class="form-field full"><label for="fImage">Ссылка на фото (необязательно)</label><input id="fImage" type="url" placeholder="https://..."></div>
+    <div class="form-field full"><label for="fDesc">Описание</label><textarea id="fDesc" placeholder="Этаж, состояние, условия покупки или аренды..."></textarea></div>
+   </div>
+   <button class="submit" type="submit">Опубликовать в прототипе</button>
+  </form>
+ </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const initialListings = [
+ {id:1,title:"Просторная квартира в новостройке",deal:"Продажа",type:"Новостройка",price:63000000,city:"Ереван, Центр",area:84,rooms:3,phone:"093 355 998",image:"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80",desc:"Современная планировка, светлые комнаты и удобное расположение.",stamp:3},
+ {id:2,title:"Уютная квартира с современным ремонтом",deal:"Продажа",type:"Квартира",price:48500000,city:"Ереван, Арабкир",area:67,rooms:2,phone:"093 355 998",image:"https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=80",desc:"Удобный вариант для семьи. Рядом магазины и общественный транспорт.",stamp:2},
+ {id:3,title:"Светлая квартира рядом с парком",deal:"Аренда",type:"Квартира",price:280000,city:"Ереван, Давташен",area:58,rooms:2,phone:"093 355 998",image:"https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=80",desc:"Меблирована, аккуратное состояние, долгосрочная аренда.",stamp:1},
+ {id:4,title:"Частный дом с просторным двором",deal:"Продажа",type:"Дом",price:79000000,city:"Ереван, Нор Норк",area:145,rooms:4,phone:"093 355 998",image:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80",desc:"Отдельный дом с двором и парковочным местом.",stamp:0},
+ {id:5,title:"Коммерческое помещение на первой линии",deal:"Аренда",type:"Коммерческая",price:450000,city:"Ереван, Малатия-Себастия",area:72,rooms:0,phone:"093 355 998",image:"https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=80",desc:"Подойдёт для офиса, студии или небольшого магазина.",stamp:-1},
+ {id:6,title:"Квартира с видом на город",deal:"Продажа",type:"Квартира",price:72500000,city:"Ереван, Канакер-Зейтун",area:96,rooms:3,phone:"093 355 998",image:"https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=80",desc:"Просторная гостиная, большие окна и функциональная планировка.",stamp:-2}
+];
+let userListings = [];
+const fmt = n => new Intl.NumberFormat('ru-RU').format(n);
+const grid = document.getElementById('listingGrid');
+function toast(message){const el=document.getElementById('toast');el.textContent=message;el.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display='none',2600)}
+function card(x){const rooms=x.rooms ? `<span>▦ ${x.rooms}${x.rooms>=4?'+':''} комн.</span>`:'';const area=x.area?`<span>↔ ${x.area} м²</span>`:'';return `<article class="card"><div class="photo"><img src="${escapeAttr(x.image||'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80')}" alt="${escapeAttr(x.title)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80'"><span class="tag">${escapeHtml(x.deal)} · ${escapeHtml(x.type)}</span><button class="heart" title="Сохранить" aria-label="Сохранить объявление" onclick="this.textContent=this.textContent==='♡'?'♥':'♡';toast('Избранное доступно в демо-режиме')">♡</button></div><div class="card-body"><div class="price">${fmt(x.price)} <span>֏${x.deal==='Аренда'?'/мес.':''}</span></div><h3>${escapeHtml(x.title)}</h3><div class="address">⌖ ${escapeHtml(x.city)}</div><div class="facts">${area}${rooms}<span>⌂ ${escapeHtml(x.deal)}</span></div><div class="card-foot"><span class="agency">ART HOUSE REALTY</span><button class="details" onclick="showDetails(${Number(x.id)})">Подробнее</button></div></div></article>`}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function escapeAttr(s){return escapeHtml(s)}
+function render(){const q=document.getElementById('query').value.trim().toLowerCase(),deal=document.getElementById('deal').value,type=document.getElementById('type').value,rooms=document.getElementById('rooms').value,sort=document.getElementById('sort').value;let arr=[...userListings,...initialListings].filter(x=>(!q||(x.title+' '+x.city+' '+(x.desc||'')).toLowerCase().includes(q))&&(!deal||x.deal===deal)&&(!type||x.type===type)&&(!rooms||(rooms==='4'?x.rooms>=4:String(x.rooms)===rooms)));if(sort==='low')arr.sort((a,b)=>a.price-b.price);else if(sort==='high')arr.sort((a,b)=>b.price-a.price);else arr.sort((a,b)=>b.stamp-a.stamp);document.getElementById('count').textContent=`Найдено объявлений: ${arr.length}`;grid.innerHTML=arr.length?arr.map(card).join(''):'<div class="empty"><strong>Ничего не найдено</strong><p>Измените параметры поиска или добавьте новое объявление.</p></div>'}
+function showDetails(id){const x=[...userListings,...initialListings].find(y=>y.id===id);if(!x)return;alert(`${x.title}\n\n${x.deal} · ${x.type}\nЦена: ${fmt(x.price)} ֏${x.deal==='Аренда'?'/мес.':''}\nАдрес: ${x.city}\nПлощадь: ${x.area||'—'} м²\nКомнат: ${x.rooms||'—'}\n\n${x.desc||'Описание не добавлено'}\n\nТелефон: ${x.phone||'093 355 998'}`)}
+const backdrop=document.getElementById('modalBackdrop');function openModal(){backdrop.classList.add('open')}function closeModal(){backdrop.classList.remove('open')}
+document.getElementById('openForm').addEventListener('click',openModal);document.getElementById('closeForm').addEventListener('click',closeModal);backdrop.addEventListener('click',e=>{if(e.target===backdrop)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+document.getElementById('searchBtn').addEventListener('click',render);document.getElementById('sort').addEventListener('change',render);['query','deal','type','rooms'].forEach(id=>document.getElementById(id).addEventListener(id==='query'?'input':'change',render));
+document.getElementById('listingForm').addEventListener('submit',e=>{e.preventDefault();const val=id=>document.getElementById(id).value.trim();const item={id:Date.now(),title:val('fTitle'),deal:val('fDeal'),type:val('fType'),price:Number(val('fPrice')),city:val('fCity'),area:Number(val('fArea'))||0,rooms:Number(val('fRooms'))||0,phone:val('fPhone'),image:val('fImage'),desc:val('fDesc'),stamp:Date.now()};userListings.unshift(item);try{const saved=JSON.parse(localStorage.getItem('ahrListings')||'[]');saved.unshift(item);localStorage.setItem('ahrListings',JSON.stringify(saved))}catch(err){};closeModal();e.target.reset();render();window.scrollTo({top:document.getElementById('listings').offsetTop-20,behavior:'smooth'});toast('Объявление добавлено в прототип')});
+try{userListings=JSON.parse(localStorage.getItem('ahrListings')||'[]')}catch(e){userListings=[]}
+document.getElementById('year').textContent=new Date().getFullYear();render();
+</script>
+</body>
+</html>'''
+path = Path("/mnt/data/art_house_realty_prototype.html")
+path.write_text(html, encoding="utf-8")
+print(f"Создан файл: {path} ({path.stat().st_size:,} байт)")
